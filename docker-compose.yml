@@ -1,0 +1,20 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/dev/Dockerfile
+    container_name: vue-dev
+    volumes:
+      - .:/app
+      - dev_modules:/app/node_modules
+    ports:
+      - "5173:5173"
+    env_file:
+      - docker/dev/.env
+    environment:
+      - NODE_ENV=development
+    command: npm run dev
+
+volumes:
+  dev_modules:
+    name: dev_modules
