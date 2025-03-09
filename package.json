@@ -28,6 +28,7 @@
     "docker:start:all": "chmod +x ./start-all.sh && ./start-all.sh",
     "docker:restart:all": "chmod +x ./restart-all.sh && ./restart-all.sh", 
     "docker:stop:all": "chmod +x ./stop-all.sh && ./stop-all.sh",
+    "docker:clean": "chmod +x ./clean.sh && ./clean.sh",
     "docker:dev:sh": "docker exec -it vue-dev bash",
     "docker:test:sh": "docker exec -it vue-test sh",
     "docker:prod:sh": "docker exec -it vue-prod sh"
