@@ -43,5 +43,27 @@ fi
 echo "프로덕션 환경을 시작합니다..."
 echo "프로덕션 서버가 시작되면 http://localhost 에서 접속할 수 있습니다."
 
-# 프로덕션 환경 재실행
-docker-compose -f docker/prod/docker-compose.yml up
+# 프로덕션 환경 재실행 (백그라운드에서)
+docker-compose -f docker/prod/docker-compose.yml up -d
+echo "프로덕션 환경이 백그라운드에서 시작되었습니다."
+echo "로그를 확인하려면: docker logs -f vue-prod"
+
+# Nginx 서버 시작 확인 (최대 30초 대기)
+echo "프로덕션 서버 시작을 기다리는 중..."
+max_wait=30
+counter=0
+while [ $counter -lt $max_wait ]; do
+    # Nginx가 시작되었는지 확인
+    if docker logs vue-prod 2>&1 | grep -q "start worker process"; then
+        echo "프로덕션 서버가 시작되었습니다. http://localhost 에서 접속 가능합니다."
+        break
+    fi
+    sleep 2
+    counter=$((counter+2))
+    echo -n "."
+done
+
+if [ $counter -ge $max_wait ]; then
+    echo ""
+    echo "프로덕션 서버 상태를 확인할 수 없습니다. 로그를 확인해보세요: docker logs vue-prod"
+fi

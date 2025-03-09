@@ -3,6 +3,7 @@ services:
     build:
       context: ../..
       dockerfile: docker/dev/Dockerfile
+    image: dev-app
     container_name: vue-dev
     volumes:
       - ../..:/app

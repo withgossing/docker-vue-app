@@ -3,10 +3,12 @@ services:
     build:
       context: ../..
       dockerfile: docker/test/Dockerfile
+    image: test-app
     container_name: vue-test
     volumes:
-      - test_build:/app/dist
-      - test_modules:/app/node_modules
+      - ../..:/app
+      - dev_modules:/app/node_modules
+      - test_modules:/app/test_modules
     ports:
       - "8080:80"
     environment:
@@ -14,7 +16,8 @@ services:
     restart: unless-stopped
 
 volumes:
-  test_build:
-    name: test_build
+  dev_modules:
+    name: dev_modules
+    external: true
   test_modules:
     name: test_modules

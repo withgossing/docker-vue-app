@@ -1,32 +1,20 @@
-FROM node:20 as build-stage
+FROM nginx:stable-alpine
 
-WORKDIR /app
-
-# 앱 의존성 파일 복사
-COPY package*.json ./
-
-# 의존성 설치 (ci 대신 install 사용)
-RUN npm install
-
-# 소스 코드 복사
-COPY . .
-
-# 테스트 환경 변수 파일을 .env로 복사
-COPY docker/test/.env .env
-
-# 테스트용 빌드
-RUN npm run build
-
-# Nginx 스테이지
-FROM nginx:stable-alpine as test-stage
+# 필요한 도구 설치
+RUN apk add --no-cache nodejs npm
 
 # Nginx 설정
 COPY docker/test/nginx.conf /etc/nginx/conf.d/default.conf
 
-# 빌드된 앱 파일 복사
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+# 빌드 스크립트 복사
+COPY docker/test/build-and-serve.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/build-and-serve.sh
+
+# 소스 코드 폴더 생성
+WORKDIR /app
 
 # nginx 포트 노출
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+# 빌드 후 nginx 실행
+CMD ["/usr/local/bin/build-and-serve.sh"]
