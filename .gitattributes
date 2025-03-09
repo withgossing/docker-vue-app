@@ -1,1 +1,14 @@
+# .gitattributes 파일 생성
+cat > .gitattributes << EOL
+# 모든 텍스트 파일에 대해 LF 적용
 * text=auto eol=lf
+
+# 바이너리 파일 처리
+*.png binary
+*.jpg binary
+*.gif binary
+EOL
+
+# 추가 및 커밋
+git add .gitattributes
+git commit -m "Add .gitattributes file"

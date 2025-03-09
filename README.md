@@ -1,45 +1,3 @@
-# vue-app
-
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
-
-
-
 # Vue.js + Vite Docker 개발 환경
 
 이 프로젝트는 Vue.js 3 + Vite + TypeScript 애플리케이션을 Docker 컨테이너에서 개발, 테스트 및 배포하기 위한 환경을 제공합니다.
@@ -57,91 +15,127 @@ npm run lint
 1. **개발 환경 (dev)**:
    - 핫 리로딩이 적용된 Vite 개발 서버 실행
    - 소스 코드 편집 및 개발 작업 수행
-   - 실행 시 모든 환경 초기화 후 시작
    - 접속: http://localhost:5173
 
 2. **테스트 환경 (test)**:
    - 개발 환경에서 작성된 소스 코드를 빌드
    - Nginx를 통해 빌드된 앱 제공
-   - 기본적으로 Ctrl+C로 종료 가능한 포그라운드 모드로 실행
-   - 프로덕션 배포 시에는 백그라운드 모드로 전환
    - 접속: http://localhost:8080
 
 3. **프로덕션 환경 (prod)**:
    - 테스트 환경에서 생성된 빌드 결과물을 기반으로 실행
    - Nginx를 통해 앱 제공
-   - 프로덕션 환경 설정 적용
-   - 실행 시 프로덕션 환경만 초기화 후 시작
    - 접속: http://localhost
+
+## 스크립트 설명
+
+각 환경별로 다음 스크립트가 제공됩니다:
+
+### 개발 환경 스크립트
+
+- `start.sh`: 개발 환경을 시작합니다.
+- `restart.sh`: 개발 환경을 초기화하고 재시작합니다.
+- `stop.sh`: 개발 환경을 종료합니다.
+
+### 테스트 환경 스크립트
+
+- `start.sh`: 테스트 환경을 시작합니다.
+- `restart.sh`: 테스트 환경을 초기화하고 재시작합니다.
+- `stop.sh`: 테스트 환경을 종료합니다.
+
+### 프로덕션 환경 스크립트
+
+- `start.sh`: 프로덕션 환경을 시작합니다.
+- `restart.sh`: 프로덕션 환경을 초기화하고 재시작합니다.
+- `stop.sh`: 프로덕션 환경을 종료합니다.
+
+### 종합 스크립트
+
+- `start-all.sh`: 모든 환경을 시작합니다.
+- `restart-all.sh`: 모든 환경을 초기화하고 재시작합니다.
+- `stop-all.sh`: 모든 환경을 종료합니다.
 
 ## 시작하기
 
-### VS Code에서 개발 컨테이너 열기 (개발 환경)
+### 스크립트 실행 권한 부여
 
-1. VS Code 열기
-2. Dev Containers 확장 설치
-3. 명령 팔레트(F1)에서 `Dev Containers: Open Folder in Container` 선택
-4. 프로젝트 폴더 선택
-
-### 각 환경 실행 방법
-
-**개발 환경 실행** (모든 환경 초기화 후 시작):
 ```bash
-npm run docker:dev
-# 또는
-./scripts/run-dev.sh
-
-# 백그라운드에서 실행
-npm run docker:dev:detach
+# 모든 스크립트에 실행 권한 부여
+chmod +x docker/dev/*.sh docker/test/*.sh docker/prod/*.sh *.sh
 ```
 
-**테스트 환경 실행** (테스트 환경만 초기화 후 시작):
-```bash
-# 포그라운드에서 실행 (Ctrl+C로 종료 가능)
-npm run docker:test
-# 또는
-./scripts/run-test.sh
+### 환경별 실행 방법
 
-# 프로덕션 배포를 위해 백그라운드에서 실행 (Ctrl+C로 종료되지 않음)
-npm run docker:test:bg
+**개발 환경**:
+```bash
+# 시작
+./docker/dev/start.sh
 # 또는
-./scripts/start-test-background.sh
+npm run docker:dev:start
+
+# 재시작
+./docker/dev/restart.sh
+# 또는
+npm run docker:dev:restart
+
+# 종료
+./docker/dev/stop.sh
+# 또는
+npm run docker:dev:stop
 ```
 
-**프로덕션 환경 실행** (프로덕션 환경만 초기화 후 시작):
+**테스트 환경**:
 ```bash
-# 테스트 환경 빌드를 가져와 프로덕션 배포
-npm run docker:deploy-prod
+# 시작
+./docker/test/start.sh
 # 또는
-./scripts/run-prod.sh
+npm run docker:test:start
 
-# 일반 프로덕션 실행
-npm run docker:prod
+# 재시작
+./docker/test/restart.sh
+# 또는
+npm run docker:test:restart
+
+# 종료
+./docker/test/stop.sh
+# 또는
+npm run docker:test:stop
 ```
 
-### 워크플로우
-
-일반적인 개발/테스트 워크플로우:
-1. `npm run docker:dev` - 개발 환경에서 코드 작성 및 개발
-2. `npm run docker:test` - 테스트 환경에서 빌드 및 테스트 (Ctrl+C로 종료 가능)
-
-프로덕션 배포 워크플로우:
-1. `npm run docker:test:bg` - 테스트 환경을 백그라운드에서 실행
-2. `npm run docker:deploy-prod` - 테스트 환경 빌드를 프로덕션에 배포
-
-### 볼륨 관리
-
-각 환경은 명명된 볼륨을 사용하여 데이터를 유지합니다:
-
+**프로덕션 환경**:
 ```bash
-# 볼륨 목록 확인
-docker volume ls | grep dev_ test_ prod_
+# 시작
+./docker/prod/start.sh
+# 또는
+npm run docker:prod:start
 
-# 특정 볼륨 삭제
-docker volume rm dev_modules
-docker volume rm test_build
-docker volume rm test_modules
-docker volume rm prod_modules
+# 재시작
+./docker/prod/restart.sh
+# 또는
+npm run docker:prod:restart
+
+# 종료
+./docker/prod/stop.sh
+# 또는
+npm run docker:prod:stop
+```
+
+**모든 환경 한 번에 관리**:
+```bash
+# 모든 환경 시작
+./start-all.sh
+# 또는
+npm run docker:start:all
+
+# 모든 환경 재시작
+./restart-all.sh
+# 또는
+npm run docker:restart:all
+
+# 모든 환경 종료
+./stop-all.sh
+# 또는
+npm run docker:stop:all
 ```
 
 ### 컨테이너 접속 방법
