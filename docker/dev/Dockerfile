@@ -12,9 +12,7 @@ RUN apt-get update && \
 COPY package*.json ./
 
 # 의존성 설치 (Tailwind CSS 및 DaisyUI 포함)
-RUN npm install && \
-    npm install -D tailwindcss postcss autoprefixer daisyui@latest && \
-    npx tailwindcss init -p
+RUN npm install
 
 # 개발 서버 포트 노출
 EXPOSE 5173

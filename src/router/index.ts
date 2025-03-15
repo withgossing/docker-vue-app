@@ -10,14 +10,20 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/AboutView.vue')
+      path: '/analytics',
+      name: 'analytics',
+      // 지연 로딩을 위한 route level code-splitting
+      component: () => import('../views/AnalyticsView.vue')
     },
     {
-      path: '/daisy-example',
-      name: 'daisyExample',
-      component: () => import('../components/DaisyExample.vue')
+      path: '/users',
+      name: 'users',
+      component: () => import('../views/UsersView.vue')
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: () => import('../views/SettingsView.vue')
     }
   ]
 })
