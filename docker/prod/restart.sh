@@ -3,12 +3,49 @@
 # 프로덕션 환경 재시작 스크립트
 cd "$(dirname "$0")/../.."
 
+# 파라미터 확인
+CLEAN_ALL=false
+
+# 파라미터 처리
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --clean|-c) CLEAN_ALL=true ;;
+        *) echo "알 수 없는 파라미터: $1"; exit 1 ;;
+    esac
+    shift
+done
+
 echo "프로덕션 환경을 재시작합니다..."
 
 # 실행 중인 프로덕션 컨테이너 확인 및 중지
 if [ "$(docker ps -q -f name=vue-prod)" ]; then
     echo "프로덕션 컨테이너를 중지합니다."
-    docker-compose -f docker/prod/docker-compose.yml down
+    docker-compose -p prod -f docker/prod/docker-compose.yml down
+fi
+
+# 이미지 및 볼륨 삭제 옵션이 활성화된 경우
+if [ "$CLEAN_ALL" = true ]; then
+    echo "프로덕션 환경의 이미지와 볼륨을 모두 삭제합니다..."
+    
+    # 이미지 삭제
+    if [ "$(docker images -q prod-app)" ]; then
+        echo "프로덕션 이미지를 삭제합니다."
+        docker rmi prod-app
+    fi
+    
+    # 볼륨 삭제
+    if [ "$(docker volume ls -q -f name=prod_modules)" ]; then
+        echo "프로덕션 볼륨을 삭제합니다."
+        docker volume rm prod_modules
+    fi
+    
+    # 빌드 결과물 삭제
+    if [ -d "./dist" ]; then
+        echo "빌드 결과물을 삭제합니다."
+        rm -rf ./dist
+    fi
+    
+    echo "이미지와 볼륨이 삭제되었습니다. 프로덕션 환경을 새로 빌드합니다."
 fi
 
 # 빌드 결과물 확인 및 필요시 테스트 환경에서 복사
@@ -44,7 +81,7 @@ echo "프로덕션 환경을 시작합니다..."
 echo "프로덕션 서버가 시작되면 http://localhost 에서 접속할 수 있습니다."
 
 # 프로덕션 환경 재실행 (백그라운드에서)
-docker-compose -f docker/prod/docker-compose.yml up -d
+docker-compose -p prod -f docker/prod/docker-compose.yml up -d
 echo "프로덕션 환경이 백그라운드에서 시작되었습니다."
 echo "로그를 확인하려면: docker logs -f vue-prod"
 

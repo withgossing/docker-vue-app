@@ -19,3 +19,4 @@ services:
 volumes:
   dev_modules:
     name: dev_modules
+    external: true

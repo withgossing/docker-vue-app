@@ -10,8 +10,8 @@ echo "개발 서버가 시작되면 http://localhost:5173 에서 접속할 수 �
 if [ "$(docker ps -q -f name=vue-dev)" ]; then
     echo "개발 컨테이너가 이미 실행 중입니다."
 else
-    # 백그라운드에서 실행
-    docker-compose up -d
+    # 백그라운드에서 실행 (프로젝트 이름을 'dev'로 지정)
+    docker-compose -p dev up -d
     echo "개발 환경이 백그라운드에서 시작되었습니다."
     echo "로그를 확인하려면: docker logs -f vue-dev"
     

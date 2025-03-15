@@ -19,11 +19,9 @@ echo "빌드 중입니다. 잠시 기다려 주세요..."
 if [ "$(docker ps -q -f name=vue-test)" ]; then
     echo "테스트 컨테이너가 이미 실행 중입니다."
 else
-    # -d 옵션으로 백그라운드 실행
-    docker-compose -f docker/test/docker-compose.yml up -d
+    # -d 옵션으로 백그라운드 실행 (프로젝트 이름을 'test'로 지정)
+    docker-compose -p test -f docker/test/docker-compose.yml up -d
     echo "테스트 환경이 백그라운드에서 시작되었습니다."
-    
-    # 로그 표시
     echo "로그를 확인하려면: docker logs -f vue-test"
     
     # 빌드 완료 확인 (최대 60초 대기)

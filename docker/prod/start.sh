@@ -40,8 +40,8 @@ echo "프로덕션 환경이 시작되면 http://localhost 에서 접속할 수 
 if [ "$(docker ps -q -f name=vue-prod)" ]; then
     echo "프로덕션 컨테이너가 이미 실행 중입니다."
 else
-    # 백그라운드에서 실행
-    docker-compose -f docker/prod/docker-compose.yml up -d
+    # 백그라운드에서 실행 (프로젝트 이름을 'prod'로 지정)
+    docker-compose -p prod -f docker/prod/docker-compose.yml up -d
     echo "프로덕션 환경이 백그라운드에서 시작되었습니다."
     echo "로그를 확인하려면: docker logs -f vue-prod"
     
