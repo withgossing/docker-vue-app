@@ -1,21 +1,28 @@
+# 개발 환경을 위한 Docker Compose 설정 파일
+#
+# 이 파일은 Vue.js 개발 환경을 Docker 컨테이너로 구성합니다.
+# 개발 서버 실행 및 소스 코드 변경 감지를 위한 설정이 포함되어 있습니다.
+
 services:
   app:
     build:
-      context: .
-      dockerfile: docker/dev/Dockerfile
-    image: dev-app
-    container_name: vue-dev
+      context: . # 빌드 컨텍스트 (현재 디렉터리)
+      dockerfile: docker/dev/Dockerfile # 개발 환경 Dockerfile 경로
+    image: dev-app # 생성할 이미지 이름
+    container_name: vue-dev # 실행할 컨테이너 이름
     volumes:
-      - .:/app
-      - dev_modules:/app/node_modules
+      - .:/app # 소스 코드 마운트 (실시간 변경 감지 목적)
+      - dev_modules:/app/node_modules # node_modules 볼륨 마운트 (성능 향상)
     ports:
-      - "5173:5173"
+      - "5173:5173" # 개발 서버 포트 포워딩 (호스트:컨테이너)
     env_file:
-      - docker/dev/.env
+      - docker/dev/.env # 개발 환경 변수 파일
     environment:
-      - NODE_ENV=development
-    command: npm run dev
+      - NODE_ENV=development # Node.js 환경 변수 설정
+    command: npm run dev # 컨테이너 시작 시 실행할 명령어
 
+# 재사용 가능한 볼륨 정의
 volumes:
-  dev_modules:
+  dev_modules: # node_modules를 위한 도커 볼륨 (빌드 성능 개선)
     name: dev_modules
+    external: true

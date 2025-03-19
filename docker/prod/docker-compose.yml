@@ -1,3 +1,7 @@
+# =====================================================================
+# 프로덕션 환경용 Docker Compose 설정 파일
+# =====================================================================
+
 services:
   app:
     build:
@@ -11,8 +15,26 @@ services:
       - "80:80"
     environment:
       - NODE_ENV=production
+      # 데이터베이스 연결 정보 환경변수 추가 (읽기/쓰기 분리)
+      - DATABASE_URL=postgres://postgres:prodpassword@vue-postgres-primary:5432/vue_prod
+      - DATABASE_READ_URL=postgres://postgres:prodpassword@vue-postgres-standby:5432/vue_prod
     restart: unless-stopped
+    # 외부 네트워크 사용
+    networks:
+      - vue_prod_db_network
+    # healthcheck 추가
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
 
 volumes:
   prod_modules:
     name: prod_modules
+
+networks:
+  # 외부에서 생성된 네트워크 사용
+  vue_prod_db_network:
+    external: true

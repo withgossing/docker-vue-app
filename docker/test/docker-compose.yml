@@ -1,3 +1,7 @@
+# =====================================================================
+# 테스트 환경용 Docker Compose 설정 파일
+# =====================================================================
+
 services:
   app:
     build:
@@ -13,7 +17,19 @@ services:
       - "8080:80"
     environment:
       - NODE_ENV=test
+      # 데이터베이스 연결 정보 환경변수 추가 - 별도 컨테이너 연결
+      - DATABASE_URL=postgres://postgres:devpassword@vue-postgres-test:5432/vue_dev
     restart: unless-stopped
+    # 외부 네트워크 사용
+    networks:
+      - vue_test_network
+    # healthcheck 추가
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
 
 volumes:
   dev_modules:
@@ -21,3 +37,8 @@ volumes:
     external: true
   test_modules:
     name: test_modules
+
+networks:
+  # 외부에서 생성된 네트워크 사용
+  vue_test_network:
+    external: true

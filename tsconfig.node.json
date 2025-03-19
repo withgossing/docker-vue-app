@@ -1,5 +1,11 @@
 {
-  "extends": "@tsconfig/node22/tsconfig.json",
+  /**
+   * Node.js 환경을 위한 TypeScript 설정
+   * 
+   * 이 파일은 Vite, Vitest 등 Node.js 환경에서 실행되는
+   * 설정 파일들에 대한 TypeScript 설정을 정의합니다.
+   */
+  "extends": "@tsconfig/node22/tsconfig.json", // Node.js v22 환경을 위한 기본 설정 확장
   "include": [
     "vite.config.*",
     "vitest.config.*",
@@ -7,13 +13,13 @@
     "nightwatch.conf.*",
     "playwright.config.*",
     "eslint.config.*"
-  ],
+  ], // 타입 검사에 포함할 설정 파일 패턴
   "compilerOptions": {
-    "noEmit": true,
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "noEmit": true, // JavaScript 파일 생성 안 함 (타입 검사만 수행)
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo", // 증분 빌드 정보 저장 위치
 
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "types": ["node"]
+    "module": "ESNext", // 최신 ES 모듈 시스템 사용
+    "moduleResolution": "Bundler", // 번들러 스타일 모듈 해석 방식 사용
+    "types": ["node"] // Node.js 타입 정의 포함
   }
 }
