@@ -18,7 +18,7 @@ services:
       - .env
     environment:
       - NODE_ENV=development
-      # 데이터베이스 연결 정보 환경변수 추가 - 별도 컨테이너 연결
+      # 데이터베이스 연결 정보 환경변수 추가 - 별도 infra-app의 컨테이너 연결
       - DATABASE_URL=postgres://postgres:devpassword@vue-postgres-dev:5432/vue_dev
     command: npm run dev
     # 외부 네트워크 사용
@@ -38,6 +38,6 @@ volumes:
     external: true
 
 networks:
-  # 외부에서 생성된 네트워크 사용
+  # 외부에서 생성된 네트워크 사용 (infra-app에서 생성)
   vue_dev_network:
     external: true

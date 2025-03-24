@@ -35,6 +35,6 @@ volumes:
     name: prod_modules
 
 networks:
-  # 외부에서 생성된 네트워크 사용
+  # 외부에서 생성된 네트워크 사용 (infra-app에서 생성)
   vue_prod_db_network:
     external: true

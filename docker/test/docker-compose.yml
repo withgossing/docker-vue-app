@@ -17,7 +17,7 @@ services:
       - "8080:80"
     environment:
       - NODE_ENV=test
-      # 데이터베이스 연결 정보 환경변수 추가 - 별도 컨테이너 연결
+      # 데이터베이스 연결 정보 환경변수 추가 - 별도 infra-app의 컨테이너 연결
       - DATABASE_URL=postgres://postgres:devpassword@vue-postgres-test:5432/vue_dev
     restart: unless-stopped
     # 외부 네트워크 사용
@@ -39,6 +39,6 @@ volumes:
     name: test_modules
 
 networks:
-  # 외부에서 생성된 네트워크 사용
+  # 외부에서 생성된 네트워크 사용 (infra-app에서 생성)
   vue_test_network:
     external: true
